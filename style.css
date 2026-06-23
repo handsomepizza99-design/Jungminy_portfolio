@@ -1062,7 +1062,7 @@ section{ position:relative; }
   min-width:0;
 }
 .proj-treadmill-figure .proj-media{
-  aspect-ratio:3/4;
+  aspect-ratio:4/3.1;
   margin-top:0;
 }
 .proj-treadmill-figure figcaption{
