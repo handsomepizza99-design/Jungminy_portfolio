@@ -232,26 +232,76 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ----------------------------------------------------------------------
      12. Projects — accordion expand/collapse
   ---------------------------------------------------------------------- */
+  function closeProjBody(card){
+    const body = card.querySelector('.proj-body');
+    // If currently fully open (maxHeight:none), measure first so the
+    // collapse transition has a real px value to animate from.
+    if (body.style.maxHeight === 'none' || body.style.maxHeight === '') {
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+    // Force a reflow so the browser registers the px value before we
+    // immediately change it to 0 (otherwise the transition can be skipped).
+    void body.offsetHeight;
+    card.classList.remove('open');
+    body.style.maxHeight = '0px';
+  }
+
+  function openProjBody(card){
+    const body = card.querySelector('.proj-body');
+    card.classList.add('open');
+    body.style.maxHeight = body.scrollHeight + 'px';
+
+    // Images (especially multiple stacked ones) can finish loading after
+    // this point and grow the content taller than the measured height —
+    // keep re-measuring as each one loads so nothing gets clipped/overlapped.
+    const imgs = body.querySelectorAll('img');
+    let pending = 0;
+    imgs.forEach(img => {
+      if (!img.complete) {
+        pending++;
+        const onDone = () => {
+          img.removeEventListener('load', onDone);
+          img.removeEventListener('error', onDone);
+          if (card.classList.contains('open')) {
+            body.style.maxHeight = body.scrollHeight + 'px';
+          }
+          pending--;
+          if (pending === 0) finalize();
+        };
+        img.addEventListener('load', onDone);
+        img.addEventListener('error', onDone);
+      }
+    });
+
+    function finalize(){
+      // Once everything has settled, release the fixed cap so any later
+      // reflow (fonts, resize, etc.) can never clip or overlap content.
+      if (card.classList.contains('open')) body.style.maxHeight = 'none';
+    }
+    if (pending === 0) {
+      // No images still loading — release the cap after the open transition.
+      body.addEventListener('transitionend', function te(e){
+        if (e.target !== body || e.propertyName !== 'max-height') return;
+        body.removeEventListener('transitionend', te);
+        if (card.classList.contains('open')) body.style.maxHeight = 'none';
+      });
+    }
+  }
+
   document.querySelectorAll('[data-toggle]').forEach(btn => {
     btn.addEventListener('click', () => {
       const card = btn.closest('[data-project]');
-      const body = card.querySelector('.proj-body');
       const isOpen = card.classList.contains('open');
 
       // close all others (single-open accordion) — optional; comment out for multi-open
       document.querySelectorAll('[data-project].open').forEach(openCard => {
-        if (openCard !== card) {
-          openCard.classList.remove('open');
-          openCard.querySelector('.proj-body').style.maxHeight = '0px';
-        }
+        if (openCard !== card) closeProjBody(openCard);
       });
 
       if (isOpen) {
-        card.classList.remove('open');
-        body.style.maxHeight = '0px';
+        closeProjBody(card);
       } else {
-        card.classList.add('open');
-        body.style.maxHeight = body.scrollHeight + 'px';
+        openProjBody(card);
       }
     });
   });
@@ -260,7 +310,9 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', () => {
     document.querySelectorAll('[data-project].open').forEach(card => {
       const body = card.querySelector('.proj-body');
-      body.style.maxHeight = body.scrollHeight + 'px';
+      if (body.style.maxHeight !== 'none') {
+        body.style.maxHeight = body.scrollHeight + 'px';
+      }
     });
   });
 

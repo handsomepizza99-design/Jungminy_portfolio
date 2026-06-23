@@ -1028,6 +1028,12 @@ section{ position:relative; }
   align-items:center;
   justify-content:center;
 }
+.proj-media-portrait{
+  aspect-ratio:3/4;
+  max-width:480px;
+  margin-left:auto;
+  margin-right:auto;
+}
 .proj-media img{ width:100%; height:100%; object-fit:contain; cursor:zoom-in; }
 
 .proj-stack{ display:flex; flex-direction:column; gap:22px; }
