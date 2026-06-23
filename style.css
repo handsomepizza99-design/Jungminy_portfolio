@@ -1044,15 +1044,11 @@ section{ position:relative; }
 
 .proj-stack{ display:flex; flex-direction:column; gap:22px; }
 
-/* ---- Project III — side-by-side treadmill photos + text column ---- */
-.proj-treadmill-layout{
-  padding:0 26px 30px;
-  display:grid;
-  grid-template-columns:1.6fr 1fr;
-  gap:30px;
-  align-items:start;
-}
-.proj-treadmill-photos{
+/* ---- Project III — photos in their own full-width row, text below
+   reuses the standard .proj-body-inner/.proj-col grid (same as every
+   other project card) instead of a custom side-by-side column layout. ---- */
+.proj-treadmill-photos-row{
+  padding:0 26px 24px;
   display:flex;
   gap:16px;
 }
@@ -1074,19 +1070,9 @@ section{ position:relative; }
   color:var(--ink-soft);
   text-align:center;
 }
-.proj-treadmill-text h5{
-  font-family:var(--f-mono);
-  font-size:11px;
-  letter-spacing:.07em;
-  text-transform:uppercase;
-  color:var(--ink-soft);
-  margin-bottom:8px;
-}
-.proj-treadmill-text p{ font-size:14px; color:var(--ink); line-height:1.65; }
 
 @media (max-width:760px){
-  .proj-treadmill-layout{ grid-template-columns:1fr; gap:22px; }
-  .proj-treadmill-photos{ flex-direction:column; }
+  .proj-treadmill-photos-row{ flex-direction:column; }
 }
 
 @media (max-width:760px){
@@ -1234,6 +1220,60 @@ section{ position:relative; }
 @media (max-width:900px){
   .future-grid{ grid-template-columns:1fr; gap:40px; }
   .future-img{ max-width:340px; margin:0 auto; }
+}
+
+/* ==========================================================================
+   FUTURE GOALS
+   ========================================================================== */
+
+.future-goals{
+  background:var(--ink);
+  color:#fff;
+}
+.future-goals .eyebrow{ color:var(--blue); }
+.future-goals .sec-title{ color:#fff; }
+.future-goals .sec-sub{ color:rgba(255,255,255,.6); max-width:56ch; }
+
+.goal-grid{
+  margin-top:48px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  border-top:1px solid rgba(255,255,255,.14);
+  border-left:1px solid rgba(255,255,255,.14);
+}
+.goal-card{
+  padding:30px 28px;
+  border-right:1px solid rgba(255,255,255,.14);
+  border-bottom:1px solid rgba(255,255,255,.14);
+}
+.goal-num{
+  font-family:var(--f-mono);
+  font-size:12px;
+  color:var(--blue);
+  margin-bottom:14px;
+}
+.goal-card h4{ font-size:18px; font-weight:700; margin-bottom:10px; }
+.goal-card p{ font-size:14px; line-height:1.65; color:rgba(255,255,255,.65); }
+
+.goal-statement{
+  margin-top:48px;
+  font-size:clamp(22px,3vw,30px);
+  font-weight:700;
+  line-height:1.4;
+  max-width:46ch;
+  color:rgba(255,255,255,.65);
+}
+.goal-statement .hl{ color:#fff; }
+.goal-attr{
+  margin-top:20px;
+  font-family:var(--f-mono);
+  font-size:12px;
+  letter-spacing:.04em;
+  color:rgba(255,255,255,.45);
+}
+
+@media (max-width:760px){
+  .goal-grid{ grid-template-columns:1fr; }
 }
 
 /* ==========================================================================
