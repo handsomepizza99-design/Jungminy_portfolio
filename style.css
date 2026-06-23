@@ -1038,6 +1038,51 @@ section{ position:relative; }
 
 .proj-stack{ display:flex; flex-direction:column; gap:22px; }
 
+/* ---- Project III — side-by-side treadmill photos + text column ---- */
+.proj-treadmill-layout{
+  padding:0 26px 30px;
+  display:grid;
+  grid-template-columns:1.6fr 1fr;
+  gap:30px;
+  align-items:start;
+}
+.proj-treadmill-photos{
+  display:flex;
+  gap:16px;
+}
+.proj-treadmill-figure{
+  flex:1;
+  margin:0;
+  min-width:0;
+}
+.proj-treadmill-figure .proj-media{
+  aspect-ratio:3/4;
+  margin-top:0;
+}
+.proj-treadmill-figure figcaption{
+  margin-top:10px;
+  font-family:var(--f-mono);
+  font-size:11px;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  text-align:center;
+}
+.proj-treadmill-text h5{
+  font-family:var(--f-mono);
+  font-size:11px;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  margin-bottom:8px;
+}
+.proj-treadmill-text p{ font-size:14px; color:var(--ink); line-height:1.65; }
+
+@media (max-width:760px){
+  .proj-treadmill-layout{ grid-template-columns:1fr; gap:22px; }
+  .proj-treadmill-photos{ flex-direction:column; }
+}
+
 @media (max-width:760px){
   .proj-body-inner{ grid-template-columns:1fr; gap:22px; }
   .proj-head{ padding:20px; gap:14px; }
@@ -1242,7 +1287,7 @@ section{ position:relative; }
   gap:18px;
 }
 .poster-gallery:has(.poster-card:only-child){
-  grid-template-columns:minmax(0,520px);
+  grid-template-columns:minmax(0,760px);
 }
 .poster-card{
   border:1px solid var(--line);
@@ -1260,7 +1305,12 @@ section{ position:relative; }
   align-items:center;
   justify-content:center;
 }
+.poster-card-img-pair{
+  aspect-ratio:18/9;
+  gap:3px;
+}
 .poster-card-img img{ width:100%; height:100%; object-fit:contain; transition:transform .5s var(--ease); }
+.poster-card-img-pair img{ width:50%; flex:1; }
 .poster-card:hover .poster-card-img img{ transform:scale(1.04); }
 .poster-card-body{ padding:18px 20px; }
 .poster-card-body .p-conf{ font-family:var(--f-mono); font-size:11px; color:var(--blue); letter-spacing:.04em; }
