@@ -1044,35 +1044,15 @@ section{ position:relative; }
 
 .proj-stack{ display:flex; flex-direction:column; gap:22px; }
 
-/* ---- Project III — photos in their own full-width row, text below
-   reuses the standard .proj-body-inner/.proj-col grid (same as every
-   other project card) instead of a custom side-by-side column layout. ---- */
+/* ---- Project III — single pre-composed comparison image, full width.
+   Text below reuses the standard .proj-body-inner/.proj-col grid (same
+   as every other project card). ---- */
 .proj-treadmill-photos-row{
   padding:0 26px 24px;
-  display:flex;
-  gap:16px;
 }
-.proj-treadmill-figure{
-  flex:1;
-  margin:0;
-  min-width:0;
-}
-.proj-treadmill-figure .proj-media{
-  aspect-ratio:4/3.1;
+.proj-media-wide{
+  aspect-ratio:16/9.7;
   margin-top:0;
-}
-.proj-treadmill-figure figcaption{
-  margin-top:10px;
-  font-family:var(--f-mono);
-  font-size:11px;
-  letter-spacing:.05em;
-  text-transform:uppercase;
-  color:var(--ink-soft);
-  text-align:center;
-}
-
-@media (max-width:760px){
-  .proj-treadmill-photos-row{ flex-direction:column; }
 }
 
 @media (max-width:760px){
