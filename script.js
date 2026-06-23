@@ -231,17 +231,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ----------------------------------------------------------------------
      12. Projects — accordion expand/collapse
+     (Uses a generously large fixed max-height instead of measuring
+     scrollHeight. Measuring exact pixel heights is fragile when images
+     inside are still decoding/loading — the box can end up capped at a
+     stale, too-small height, clipping or visually overlapping content.
+     A large fixed cap sidesteps that entirely: the box always has more
+     room than it could ever need, so it simply settles at its natural
+     content height with nothing ever clipped, regardless of image
+     load timing.)
   ---------------------------------------------------------------------- */
+  const PROJ_OPEN_MAX_HEIGHT = '4000px';
+
   function closeProjBody(card){
     const body = card.querySelector('.proj-body');
-    // If currently fully open (maxHeight:none), measure first so the
-    // collapse transition has a real px value to animate from.
-    if (body.style.maxHeight === 'none' || body.style.maxHeight === '') {
-      body.style.maxHeight = body.scrollHeight + 'px';
-    }
-    // Force a reflow so the browser registers the px value before we
-    // immediately change it to 0 (otherwise the transition can be skipped).
-    void body.offsetHeight;
     card.classList.remove('open');
     body.style.maxHeight = '0px';
   }
@@ -249,43 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function openProjBody(card){
     const body = card.querySelector('.proj-body');
     card.classList.add('open');
-    body.style.maxHeight = body.scrollHeight + 'px';
-
-    // Images (especially multiple stacked ones) can finish loading after
-    // this point and grow the content taller than the measured height —
-    // keep re-measuring as each one loads so nothing gets clipped/overlapped.
-    const imgs = body.querySelectorAll('img');
-    let pending = 0;
-    imgs.forEach(img => {
-      if (!img.complete) {
-        pending++;
-        const onDone = () => {
-          img.removeEventListener('load', onDone);
-          img.removeEventListener('error', onDone);
-          if (card.classList.contains('open')) {
-            body.style.maxHeight = body.scrollHeight + 'px';
-          }
-          pending--;
-          if (pending === 0) finalize();
-        };
-        img.addEventListener('load', onDone);
-        img.addEventListener('error', onDone);
-      }
-    });
-
-    function finalize(){
-      // Once everything has settled, release the fixed cap so any later
-      // reflow (fonts, resize, etc.) can never clip or overlap content.
-      if (card.classList.contains('open')) body.style.maxHeight = 'none';
-    }
-    if (pending === 0) {
-      // No images still loading — release the cap after the open transition.
-      body.addEventListener('transitionend', function te(e){
-        if (e.target !== body || e.propertyName !== 'max-height') return;
-        body.removeEventListener('transitionend', te);
-        if (card.classList.contains('open')) body.style.maxHeight = 'none';
-      });
-    }
+    body.style.maxHeight = PROJ_OPEN_MAX_HEIGHT;
   }
 
   document.querySelectorAll('[data-toggle]').forEach(btn => {
@@ -306,15 +272,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // keep open accordion height correct on resize
-  window.addEventListener('resize', () => {
-    document.querySelectorAll('[data-project].open').forEach(card => {
-      const body = card.querySelector('.proj-body');
-      if (body.style.maxHeight !== 'none') {
-        body.style.maxHeight = body.scrollHeight + 'px';
-      }
-    });
-  });
+  /* (No resize listener needed — the fixed max-height above already
+     gives the box more room than any card's content will ever need,
+     at any viewport width, so there's nothing to recalculate.) */
 
   /* ----------------------------------------------------------------------
      12b. Poster Q&A — accordion expand/collapse (independent multi-open)
