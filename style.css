@@ -1235,6 +1235,9 @@ section{ position:relative; }
   grid-template-columns:repeat(2,1fr);
   gap:18px;
 }
+.poster-gallery:has(.poster-card:only-child){
+  grid-template-columns:minmax(0,520px);
+}
 .poster-card{
   border:1px solid var(--line);
   border-radius:var(--r-md);
