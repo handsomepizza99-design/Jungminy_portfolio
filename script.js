@@ -231,27 +231,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ----------------------------------------------------------------------
      12. Projects — accordion expand/collapse
-     (Uses a generously large fixed max-height instead of measuring
-     scrollHeight. Measuring exact pixel heights is fragile when images
-     inside are still decoding/loading — the box can end up capped at a
-     stale, too-small height, clipping or visually overlapping content.
-     A large fixed cap sidesteps that entirely: the box always has more
-     room than it could ever need, so it simply settles at its natural
-     content height with nothing ever clipped, regardless of image
-     load timing.)
+     (Pure display:none/block toggle via the .open class — see CSS.
+     No JS height measurement of any kind. This is deliberately the
+     simplest possible mechanism: there is no max-height to mis-measure,
+     no image-load timing to race against, and no mid-transition frame
+     that could ever be caught showing a partial/overlapping layout.
+     The body is simply absent, then simply present at its natural,
+     fully-laid-out height — nothing in between.)
   ---------------------------------------------------------------------- */
-  const PROJ_OPEN_MAX_HEIGHT = '4000px';
-
   function closeProjBody(card){
-    const body = card.querySelector('.proj-body');
     card.classList.remove('open');
-    body.style.maxHeight = '0px';
   }
 
   function openProjBody(card){
-    const body = card.querySelector('.proj-body');
     card.classList.add('open');
-    body.style.maxHeight = PROJ_OPEN_MAX_HEIGHT;
   }
 
   document.querySelectorAll('[data-toggle]').forEach(btn => {
@@ -271,10 +264,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-
-  /* (No resize listener needed — the fixed max-height above already
-     gives the box more room than any card's content will ever need,
-     at any viewport width, so there's nothing to recalculate.) */
 
   /* ----------------------------------------------------------------------
      12b. Poster Q&A — accordion expand/collapse (independent multi-open)

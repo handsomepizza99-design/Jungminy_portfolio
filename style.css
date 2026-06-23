@@ -994,9 +994,15 @@ section{ position:relative; }
 .proj-card.open .proj-toggle::before,.proj-card.open .proj-toggle::after{ background:#fff; }
 
 .proj-body{
-  max-height:0;
-  overflow:hidden;
-  transition:max-height .5s var(--ease);
+  display:none;
+}
+.proj-card.open .proj-body{
+  display:block;
+  animation:projBodyFadeIn .35s ease;
+}
+@keyframes projBodyFadeIn{
+  from{ opacity:0; }
+  to{ opacity:1; }
 }
 .proj-body-inner{
   padding:0 26px 30px;
