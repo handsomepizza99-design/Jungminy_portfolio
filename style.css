@@ -901,6 +901,10 @@ section{ position:relative; }
   color:var(--blue);
   white-space:nowrap;
 }
+.pub-venue-tag-column{
+  background:#FFF3E0;
+  color:var(--orange);
+}
 
 .pub-body h4{ font-size:17px; font-weight:700; line-height:1.4; letter-spacing:-.005em; }
 .pub-meta{
